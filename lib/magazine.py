@@ -1,11 +1,10 @@
-
 class Magazine:
-    all = []
+    _all_magazines = []
     
     def __init__(self, name, category):
-        self.name = name  # This will call the setter
-        self.category = category  # This will call the setter
-        Magazine.all.append(self)
+        self.name = name
+        self.category = category
+        Magazine._all_magazines.append(self)
     
     @property
     def name(self):
@@ -28,14 +27,15 @@ class Magazine:
         self._category = value
     
     def articles(self):
-        return [article for article in Article.all if article.magazine == self]
+        from .author import Author
+        return [article for article in Author.all_articles if article.magazine == self]
     
     def contributors(self):
-        author_list = []
+        authors = []
         for article in self.articles():
-            if article.author not in author_list:
-                author_list.append(article.author)
-        return author_list
+            if article.author not in authors:
+                authors.append(article.author)
+        return authors
     
     def article_titles(self):
         articles = self.articles()
@@ -44,26 +44,30 @@ class Magazine:
         return [article.title for article in articles]
     
     def contributing_authors(self):
+        articles = self.articles()
+        if not articles:
+            return None
+        
         author_counts = {}
-        for article in self.articles():
+        for article in articles:
             author = article.author
             author_counts[author] = author_counts.get(author, 0) + 1
         
-        contributing = [author for author, count in author_counts.items() if count > 2]
-        return contributing if contributing else None
+        contributing_authors = [author for author, count in author_counts.items() if count > 2]
+        return contributing_authors if contributing_authors else None
     
     @classmethod
     def top_publisher(cls):
-        if not cls.all:
+        if not any(magazine.articles() for magazine in cls._all_magazines):
             return None
         
-        max_articles = 0
         top_magazine = None
+        max_articles = 0
         
-        for magazine in cls.all:
+        for magazine in cls._all_magazines:
             article_count = len(magazine.articles())
             if article_count > max_articles:
                 max_articles = article_count
                 top_magazine = magazine
         
-        return top_magazine if max_articles > 0 else None
+        return top_magazine

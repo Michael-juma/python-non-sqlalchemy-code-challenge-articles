@@ -1,28 +1,26 @@
 #!/usr/bin/env python3
 import ipdb
 
-from lib.author import Author
-from lib.article import Article
-from lib.magazine import Magazine
+from author import Author
+from article import Article
+from magazine import Magazine
 
 if __name__ == '__main__':
-    # Create some test instances
-    author1 = Author("John Doe")
-    author2 = Author("Jane Smith")
+    # Create some sample instances for testing
+    author_1 = Author("Carry Bradshaw")
+    author_2 = Author("Nathaniel Hawthorne")
     
-    magazine1 = Magazine("Tech Today", "Technology")
-    magazine2 = Magazine("Science Weekly", "Science")
+    magazine_1 = Magazine("Vogue", "Fashion")
+    magazine_2 = Magazine("AD", "Architecture")
     
-    article1 = Article(author1, magazine1, "The Future of AI")
-    article2 = Article(author1, magazine2, "Climate Change Solutions")
-    article3 = Article(author2, magazine1, "Programming Best Practices")
-    
-    print("Debug session started. Test your code here!")
-    print("Available objects: author1, author2, magazine1, magazine2, article1, article2, article3")
+    article_1 = Article(author_1, magazine_1, "How to wear a tutu with style")
+    article_2 = Article(author_1, magazine_2, "Dating life in NYC")
+    article_3 = Article(author_2, magazine_2, "A very long article title that is within the character limit")
     
     # Test some methods
-    print(f"Author1 articles: {len(author1.articles())}")
-    print(f"Magazine1 contributors: {len(magazine1.contributors())}")
-    print(f"Author1 topic areas: {author1.topic_areas()}")
+    print("Author 1 articles:", len(author_1.articles()))
+    print("Author 1 magazines:", [mag.name for mag in author_1.magazines()])
+    print("Magazine 1 contributors:", [auth.name for auth in magazine_1.contributors()])
+    print("Magazine 2 article titles:", magazine_2.article_titles())
     
     ipdb.set_trace()

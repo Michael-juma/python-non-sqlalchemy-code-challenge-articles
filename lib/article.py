@@ -1,18 +1,21 @@
 class Article:
-    all = []
-    
     def __init__(self, author, magazine, title):
+        from .author import Author
+        from .magazine import Magazine
+        
         if not isinstance(author, Author):
-            raise Exception("Author must be an Author instance")
+            raise Exception("Author must be an instance of Author class")
         if not isinstance(magazine, Magazine):
-            raise Exception("Magazine must be a Magazine instance")
+            raise Exception("Magazine must be an instance of Magazine class")
         if not isinstance(title, str) or not (5 <= len(title) <= 50):
             raise Exception("Title must be a string between 5 and 50 characters")
         
         self._title = title
-        self.author = author  # Use setter for validation
-        self.magazine = magazine  # Use setter for validation
-        Article.all.append(self)
+        self._author = author
+        self._magazine = magazine
+        
+        # Add this article to the class-level tracking
+        Author.all_articles.append(self)
     
     @property
     def title(self):
@@ -22,6 +25,8 @@ class Article:
     def title(self, value):
         if hasattr(self, '_title'):
             raise Exception("Title cannot be changed after instantiation")
+        if not isinstance(value, str) or not (5 <= len(value) <= 50):
+            raise Exception("Title must be a string between 5 and 50 characters")
         self._title = value
     
     @property
@@ -30,8 +35,9 @@ class Article:
     
     @author.setter
     def author(self, value):
+        from .author import Author
         if not isinstance(value, Author):
-            raise Exception("Author must be an Author instance")
+            raise Exception("Author must be an instance of Author class")
         self._author = value
     
     @property
@@ -40,6 +46,7 @@ class Article:
     
     @magazine.setter
     def magazine(self, value):
+        from .magazine import Magazine
         if not isinstance(value, Magazine):
-            raise Exception("Magazine must be a Magazine instance")
+            raise Exception("Magazine must be an instance of Magazine class")
         self._magazine = value
